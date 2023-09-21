@@ -1,0 +1,799 @@
+@extends('front.layouts.app')
+
+@section('title',$course->meta_title)
+@section('description',$course->meta_description)
+@section('keywords',$course->meta_keywords)
+
+@push('styles')
+
+
+    <link rel="stylesheet" href="{{ url('assets/css/coursel.css') }}">
+
+<style>
+    .curriculum-box {
+        border: 1px solid #333333;
+        border-radius: 10px;
+        padding: 10px;
+    }
+    .curriculum-border {
+         border-bottom: 1px solid #333333;
+    }
+    .section_coursel-content .curriculum-box li {
+       padding: 5px 0 10px 12px !important;
+    }
+
+    .certificate-program{
+        background-image: linear-gradient(to right, #f20070, #9d00ff);
+    border-radius: 15px;
+    }
+
+
+    .sbl-program{
+
+    border-radius: 15px;
+    }
+
+
+   .sbl-program.second {
+    background-image: linear-gradient(to left, #f20070, #9d00ff);
+    position: relative;
+}
+
+.sbl-program.second::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    height: 100%;
+    left: -1px;
+    border-left: 2px dashed #fff;
+}
+
+.enroll-btn{
+    padding: 10px 30px;
+    transition: 0.5s;
+    border-radius: 50px;
+    border: 2px solid #fff;
+}
+.enroll-btn:hover{
+    color: #fff !important;
+}
+
+@media (max-width: 575px){
+
+    .enroll-btn{
+        padding: 6px 15px;
+    }
+
+
+}
+
+</style>
+@endpush
+
+
+
+
+
+@php
+
+$curriculums = DB::table('curricula')->where('course_id',$course->id)->get();
+
+
+@endphp
+
+@section('content')
+
+    @include('front.inc.header')
+
+    <section class="section-coursel">
+       <video autoplay loop muted playsinline class="video" width="100%" autoplay="autoplay"  preload="auto">
+           @if($course->banner)
+               <source src="{{ asset("uploads/banner/".$course->banner)}}" type="video/mp4">
+           @endif
+
+        </video>
+    </section>
+    @if($course->category_id == 11)
+
+    @else
+    <section class="section_minified-contact">
+        <div class="container flex-lg-row flex-sm-column d-flex py-5 align-items-center d-lg-flex d-md-none d-sm-none">
+        <div class="m-auto enquiry-btn">
+            <a class="col-btn font-bold fs-20 m-0" href="#enroll-form">
+                ENQUIRE NOW
+            </a>
+           </div>
+        </div>
+
+    </section>
+
+    @endif
+    <h1 class="mt-5 mb-0  text-center">{!! $course->name !!}</h1>
+    <!-- brief tab content -->
+
+    @if($course->category_id == 11)
+
+    <section class="section-pro my-5">
+        <div class="container ">
+            <div class="row gx-0">
+                   <div class="col-6">
+                       <div class="certificate-program h-100 px-1 pt-2 p-sm-4 row mx-0 text-center">
+                           <div class="col-lg-6">
+                               <h2 class="fs-17 mb-lg-4 py-2">PROGRAM DURATION</h2>
+                               <h3>{{ $course->duration??'' }}</h3>
+                           </div>
+                           <div class="col-lg-6">
+                               <h2 class="fs-17 mb-lg-4 py-2">START DATE</h2>
+                               <h3>{{  $course->date??'' }}</h3>
+                           </div>
+                       </div>
+                   </div>
+                   <div class="col-6">
+                       <div class="sbl-program second h-100 px-1 pt-2 p-sm-4 row mx-0 text-center">
+                           <div class="col-lg-6">
+                               <h2 class="fs-17 mb-lg-4 py-2">FEES</h2>
+                               <h3>₹{{  $course->fees??'' }}</h3>
+                             
+                           </div>
+                           <div class="col-lg-6">
+                            <div class="my-5">
+                            <a href="{{ $course->link??'' }}" target="_blank" class="enroll-btn font-bold fs-20 me-sm-3 mb-3 mb-sm-0" aria-label="seamedu">ENROLL NOW</a>
+
+                            </div>
+
+                           </div>
+                       </div>
+                   </div>
+               </div>
+
+       </div>
+    </section>
+@endif
+    <section class="section_coursel-content couse-summary d-lg-block d-md-none d-none">
+        <div class="container brief-tab-content pb-4 position-relative">
+            <img src="{{ asset("assets/img/bg/bg-why-seamedu.svg")}}" alt="seamedu" class="course bg-meet-team-down position-absolute d-none d-xl-block">
+            <nav class="nav nav-pills justify-content-around nav-tab-head pt-5 pb-2" id="pills-tab" role="tablist">
+                <a class="nav-link active bg-transparent fs-20 py-0" id="pills-quicklook-tab" data-bs-toggle="pill"
+                   href="#pills-quicklook" role="tab" aria-controls="pills-quicklook" aria-selected="true">QUICK
+                    LOOK
+                </a>
+                <span class="divider"><img src="{{ asset("assets/img/icons8-vertical-line-50.png")}}" alt="seamedu"></span>
+                <a class="nav-link bg-transparent fs-20 py-0" id="pills-curriculum-tab" data-bs-toggle="pill"
+                   href="#pills-curriculum" role="tab" aria-controls="pills-curriculum" aria-selected="true">
+                    CURRICULUM
+                </a>
+                <span class="divider"><img src="{{ asset("assets/img/icons8-vertical-line-50.png")}}" alt="seamedu"></span>
+                <a class="nav-link bg-transparent fs-20 py-0" id="pills-career-tab" data-bs-toggle="pill"
+                   href="#pills-career" role="tab" aria-controls="pills-career" aria-disabled="true">
+                    CAREER OPPORTUNITY
+                </a>
+                <span class="divider"><img src="{{ asset("assets/img/icons8-vertical-line-50.png")}}" alt="seamedu"></span>
+                <a class="nav-link bg-transparent fs-20 py-0" id="pills-faq-tab" data-bs-toggle="pill" href="#pills-faq"
+                   role="tab" aria-controls="pills-faq" aria-disabled="true">
+                    FAQ
+                </a>
+            </nav>
+            <div class="tab-content p-4" id="pills-tabContent">
+                <div class="tab-pane fade show active tab-details" id="pills-quicklook" role="tabpanel"
+                     aria-labelledby="pills-quicklook">
+                   {!! $course->quick_look !!}
+                </div>
+                <div class="tab-pane fade tab-details" id="pills-curriculum" role="tabpanel"
+                     aria-labelledby="pills-curriculum">
+
+
+                     <div class="row">
+
+
+
+                    @foreach($curriculums as $cu)
+                      <div class="col-lg-4 pt-3">
+                            <div class="curriculum-box h-100">
+                                <p class="curriculum-border pb-3 pt-1 mb-3"><b>{{ $cu->title }}</b></p>
+                                <div>
+                                   {!! $cu->description !!}
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+
+
+
+
+
+                    </div>
+
+                </div>
+                <div class="tab-pane fade tab-details" id="pills-career" role="tabpanel" aria-labelledby="pills-career">
+                    {!! $course->career_opp !!}
+                </div>
+                <div class="tab-pane fade tab-details" id="pills-faq" role="tabpanel" aria-labelledby="pills-faq">
+                    <div class="section-sound-engineering coursel">
+                        <div class="accordion" id="accordionExample">
+                            @foreach($cfaqs as $faq)
+                                  <div class="accordion-item mt-3">
+                                         <h2 class="accordion-header" id="heading{{ $faq->id }}">
+                                            <button class="accordion-button @if($loop->iteration == 1) @else collapsed @endif" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#collapse{{ $faq->id }}" @if($loop->iteration == 1) aria-expanded="false" @else aria-expanded="true" @endif  aria-controls="collapse{{ $faq->id }}">
+                                                <h3 class="fs-18 m-0">{{ $faq->question }}</h3>
+                                            </button>
+                                        </h2>
+                                        <div id="collapse{{ $faq->id }}" class="accordion-collapse collapse @if($loop->iteration == 1) show @endif" aria-labelledby="heading{{ $faq->id }}"
+                                             data-bs-parent="#accordionExample">
+                                            <div class="accordion-body">
+                                                {!! $faq->answer !!}
+                                            </div>
+                                        </div>
+                                    </div>
+                            @endforeach
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- mobile brief acordian -->
+    <section class="section_accordian couse-summary d-lg-none d-md-block d-block pt-5">
+        <div class="container">
+            <div class="accordion accordion-flush" id="mobile-accordion">
+                <div class="accordion-item mb-3">
+                    <h2 class="accordion-header" id="flush-headingOne">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#flush-collapse" aria-expanded="true" aria-controls="flush-collapse">
+                            QUICK LOOK
+                        </button>
+                    </h2>
+                    <div id="flush-collapse" class="accordion-collapse collapse show" aria-labelledby="flush-headingOne"
+                         data-bs-parent="#mobile-accordion">
+                        <div class="accordion-body px-0 pb-0">
+                            {!! $course->quick_look !!}
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item mb-3">
+                    <h2 class="accordion-header" id="flush-headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                            CURRICULUM
+                        </button>
+                    </h2>
+                    <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
+                         data-bs-parent="#mobile-accordion">
+                        <div class="row accordion-body px-0 pb-0">
+                            @foreach($curriculums as $cu)
+                            <div class="col-sm-6 col-md-4 pt-3">
+                                <div class="curriculum-box h-100">
+                                    <p class="curriculum-border pb-3 pt-1 mb-3"><b>{{ $cu->title }}</b></p>
+                                    <div>
+                                    {!! $cu->description !!}
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item mb-3">
+                    <h2 class="accordion-header" id="flush-headingThree">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                            CAREER OPPORTUNITY
+                        </button>
+                    </h2>
+                    <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree"
+                         data-bs-parent="#mobile-accordion">
+                        <div class="accordion-body px-0 pb-0">
+                            {!! $course->career_opp !!}
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="flush-headingFour">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#flush-collapseFour" aria-expanded="false" aria-controls="flush-collapseFour">
+                            FAQ
+                        </button>
+                    </h2>
+                    <div id="flush-collapseFour" class="accordion-collapse collapse" aria-labelledby="flush-heading"
+                         data-bs-parent="#mobile-accordion">
+                        <div class="accordion-body px-0">
+                            <div class="section-sound-engineering coursel">
+                                <div class="accordion" id="accordionExample1">
+                                   @foreach($cfaqs as $faq)
+                                    <div class="accordion-item mt-3">
+                                        <h2 class="accordion-header" id="heading{{ $faq->id }}">
+                                            <button class="accordion-button " type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#collapse{{ $faq->id }}" aria-expanded="true" aria-controls="collapse{{ $faq->id }}">
+                                                <h3 class="fs-18 m-0">{{ $faq->question }}</h3>
+                                            </button>
+                                        </h2>
+                                        <div id="collapse{{ $faq->id }}" class="accordion-collapse collapse @if($loop->iteration == 1) show @endif" aria-labelledby="heading{{ $faq->id }}"
+                                             data-bs-parent="#accordionExample1">
+                                            <div class="accordion-body">
+                                                {!! $faq->answer !!}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endforeach
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="enroll-form" class="enroll-section text-center py-5 my-sm-4 my-lg-5">
+        <div class="container">
+            <h2 class="mb-4 pb-sm-3">LOOKING FOR MORE INFORMATION</h2>
+              @include('front.inc.enquiryform')
+        </div>
+    </section>
+
+    @php
+        $location = unserialize($course->location);
+    @endphp
+
+
+    @if(count($location) > 0 && $location != null)
+    <section class="section_program-avilable">
+        <div class="container position-relative">
+            <img src="{{ asset("assets/img/bg/course-program.svg")}}" alt="seamedu" class="course-program position-absolute d-none d-xl-block">
+            <h2 class="text-center mb-4 pb-xl-3">PROGRAM AVAILABLE AT</h2>
+            <div class="location-slider ps-4 ps-sm-0">
+                
+                   @if(in_array(3, $location))
+                <div class="item">
+                    <div class="carousel-img">
+                       <img class="w-100 br-10" src="{{ asset("assets/img/campus_tour/northcap/Northcap-delhi.jpg")}}" alt="seamedu">
+                    </div>
+                    <div class="carousel-content px-3">
+                        <h2 class="mb-3">GURUGRAM</h2>
+                     <p class="fs-12 mb-2 mb-sm-4">
+                           The NorthCap University is a progressive multidisciplinary university located in the city-centre of Gurugram, Haryana. 
+                        </p>
+                         <a href="{{ route('north-cap-university')}}" class="col-btn fs-12" aria-label="seamedu">EXPLORE</a>
+                    </div>
+                </div>
+                @endif
+                
+                 @if(in_array(2, $location))
+                <div class="item">
+                    <div class="carousel-img">
+                        <img class="br-10 w-100" src="{{ asset("assets/img/campus_tour/adypu/Pune-ADYPU(380x415Px)-min.png")}}" alt="seamedu">
+                    </div>
+                    <div class="carousel-content px-3">
+                        <h2 class="mb-3">PUNE</h2>
+                        <p class="fs-12 mb-2 mb-sm-4">
+                            Choose Ajeenkya DY Patil University, to not only explore and discover your path but also for far-reaching guidance towards your goals. We recognize that each student
+                        </p>
+                        <a href="{{ route('pune-campus-ajeenkya-dy-patil-university')}}" class="col-btn fs-12" aria-label="seamedu">EXPLORE</a>
+                    </div>
+                </div>
+                @endif
+
+                @if(in_array(1, $location))
+                <div class="item">
+                    <div class="carousel-img">
+                        <img class="br-10 w-100" src="{{ asset("assets/img/campus_tour/cmru/Bengaluru-CMRU-(-380x415Px-)-min.png")}}" alt="seamedu">
+                    </div>
+                    <div class="carousel-content px-3">
+                        <h2 class="mb-3">BENGALURU</h2>
+                        <p class="fs-12 mb-2 mb-sm-4">
+                             CMR University, Bengaluru which was established in 2013 as a private university, has been steadily growing from strength to strength and is
+                        </p>
+                        <a href="{{ route('bangalore-campus-cmr-university')}}" class="col-btn fs-12" aria-label="seamedu">EXPLORE</a>
+                    </div>
+                </div>
+                @endif
+               
+             
+                    @if(in_array(4, $location))
+                        <div class="item">
+                            <div class="carousel-img">
+                                <img class="br-10 w-100" src="{{ asset("assets/img/campus_tour/sho/Seamedu-HO-380x415Px.png")}}" alt="seamedu">
+                            </div>
+                            <div class="carousel-content px-3">
+                                <h2 class="mb-3">SEAMEDU</h2>
+                                <p class="fs-12 mb-2 mb-sm-4">
+                                    Seamedu is a unique and leading Media School founded in 2008, established to produce world-class talent in the fast evolving Media and Entertainment (M&E) Industry.
+                                </p>
+                                <a href="{{ route('head-office')}}" class="col-btn fs-12" aria-label="seamedu">EXPLORE</a>
+                            </div>
+                        </div>
+                    @endif
+            </div>
+        </div>
+    </section>
+    @endif
+
+@if(count($lifeatimages) > 0)
+
+    <section class="section-life-seamedu pt-5 py-sm-5 mt-md-5">
+        <div class="container">
+            <h2 class="text-center mb-4 pb-xl-3">STUDENTS LIFE WITH US</h2>
+            <div class="life-seamedu life-at-seamedu-slider">
+
+               @foreach($lifeatimages as $image)
+                    <div class="slider__item">
+                        @if($image->image)
+                        <img src="{{ asset("uploads/lifeatimages/".$image->image)}}" alt="seamedu" class="img-fluid">
+                        @else
+                        <img src="{{ asset("assets/img/life-seamedu1.png")}}" alt="seamedu" class="img-fluid">
+                        @endif
+                    </div>
+               @endforeach
+
+
+
+            </div>
+        </div>
+    </section>
+
+@endif
+    @if(count($studentworks) > 0)
+    <section class="student-work pt-5 py-md-5">
+        <div class="container">
+            <div class="px-3 d-flex justify-content-between justify-content-md-center align-items-center mb-4 pb-3">
+                <h2 class="mb-0">STUDENT WORK</h2>
+                <a class="fs-13 font-bold view-more-btn d-inline-block d-md-none text-decoration-underline" href="{{ route('student-work') }}">VIEW MORE</a>
+            </div>
+            <div class="row gx-md-3 gx-xl-4 students gallery gx-0">
+
+
+              @foreach($studentworks as $studentwork)
+                    @php
+                        $category = \App\Models\StudentWorkCategory::where('id',$studentwork->category)->first();
+                    @endphp
+                    <div class="col-xl-3 col-lg-4 col-sm-6 pb-5 pb-xl-2 work-div" >
+                        @if($studentwork->image)
+
+                            <a href="{{ asset("uploads/studentworks/".$studentwork->image)}}"><img class="work-img img-fluid" src="{{ asset("uploads/studentworks/".$studentwork->image)}}" alt="seamedu" aria-label="seamedu"></a>
+
+                        @else
+                            <a href="{{ asset("assets/img/dummy-student.png")}}"><img class="work-img img-fluid" src="{{ asset("assets/img/dummy-student.png")}}" alt="seamedu" aria-label="seamedu"></a>
+
+                        @endif
+
+                            <p class="fs-16 work-heading mt-3 mb-2 d-flex align-items-center"> {{ $studentwork->name??'' }} @if($studentwork->video)<img class="video-icon ms-3 c-pointer" src="{{ asset("assets/img/video-icon.png")}}"onclick="studentworkmodal({{$studentwork->id}})" alt="seamedu">@endif</p>
+                            <input type="hidden" class="modalid{{$studentwork->id}}" value="{{ $studentwork->video }}">
+                            <p class="fs-14 worker-name mb-4">{{ $category->name }}</p>
+                            <p class="fs-13 box mb-0 d-inline-block">{{ $studentwork->tag??'' }}</p>
+                    </div>
+
+
+              @endforeach
+
+
+            </div>
+            <div class="col-12 text-center mt-sm-4 mt-lg-5 d-none d-md-block">
+                <a class="fs-20 font-bold view-more-btn" href="{{ url('student-work') }}">VIEW MORE</a>
+            </div>
+        </div>
+    </section>
+
+    @endif
+
+
+    <section class="section_common-slider pb-5 my-sm-3 my-lg-5">
+        <div class="container">
+            <h2 class="text-center mb-4 pb-xl-3">OUR PARTNERS</h2>
+            <div class="slider px-3 px-lg-0">
+                @include('front.inc.our-partners')
+            </div>
+        </div>
+    </section>
+
+      @include('front.inc.student-placements')
+
+    <section class="section_coursel-meet pt-5 pb-xl-5">
+        <div class="container position-relative">
+            <img src="{{ asset("assets/img/bg/course-meet-team-up.svg")}}" alt="seamedu" class="bg-meet-team-up position-absolute d-none d-xl-block">
+            <img src="{{ asset("assets/img/bg/course-meet-team-down.svg")}}" alt="seamedu" class="bg-meet-team-down position-absolute d-none d-xl-block">
+            <h2 class="text-center mb-4 mb-sm-5">MEET THE TEAM</h2>
+            <div class="slider-meet-the-team px-4 px-sm-0">
+
+            @foreach($faculties as $faculty)
+              <div class="slider__item">
+                    <div class="profile-div">
+                @if($faculty->image)
+
+                            <img class="profile-pic" src="{{ asset("uploads/faculties/".$faculty->image)}}" alt="seamedu">
+
+                        @else
+                            <img class="profile-pic" src="{{ asset("assets/img/faculty3.png")}}" alt="seamedu">
+
+                @endif
+
+
+                    </div>
+                    <div class="profile-name">
+                        <h3 class="mb-3">{{ $faculty->name }}</h3>
+                        <p class="mb-0">{{ $faculty->position }}</p>
+                    </div>
+                    <div class="profile-content text-center">
+                        <h3 class="">{{ $faculty->name }}</h3>
+                        <p class="fs-16">{{ $faculty->position }}</p>
+                        <p class="fs-13 profile-more">
+                           {{ $faculty->short_description??'' }}
+                        </p>
+                    </div>
+                </div>
+            @endforeach
+
+
+            </div>
+        </div>
+    </section>
+
+   <section class="contact-card home pb-5 mb-md-5">
+    <div class="container mb-4 mb-sm-5 pe-0 pe-sm-3 pe-lg-5">
+        <div class="card-div col-11 offset-lg-1 col-lg-11">
+            <img src="{{ asset("assets/img/bg-cards.png")}}" alt="seamedu" class="position-absolute bg-counceller">
+            <h2 class="fs-40 mb-0">TALK TO OUR<br>CAREER COUNSELLOR</h2>
+            <a href="mailto:info@seamedu.com" class="fs-20 font-bold d-block" aria-label="seamedu">
+                <img src="{{ asset("assets/img/mail.png")}}" alt="seamedu" class="me-2 me-sm-3 talk img-fluid"> info@seamedu.com
+            </a>
+            <a href="tel:02046607500" class="fs-20 font-bold d-block pt-3 pt-sm-4",aria-label="seamedu">
+                <img src="{{ asset("assets/img/call.png")}}" alt="seamedu" class="me-2 me-sm-3 talk img-fluid">020 46607500
+
+            </a>
+        </div>
+    </div>
+</section>
+
+@php
+
+$url = DB::table('career_guides_data')->where('course_id', 'LIKE', '%'.$course->id.'%') ->first();
+
+@endphp
+
+    <section class="gradient-section py-4 py-sm-5 mb-5">
+        <div class="container py-2 py-sm-3">
+            <div class="d-flex justify-content-between align-items-center text-center">
+                <h2 class="mb-0 fs-30" >CAREER GUIDE FOR {{ $course->name??'' }}</h2>
+                <a class="fs-20 d-inline-block click-here-btn" href="{{ url($url->guide_url??'/')  }}">CLICK HERE <img src="{{ asset("assets/img/.png")}}" alt="seamedu"></a>
+            </div>
+        </div>
+    </section>
+    <div class="modal fade section-video-testimonials" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <iframe width="100%" id="frameid" height="500" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+
+    <script>
+
+        function studentworkmodal(id)
+        {
+
+            $dta =    $('.modalid' + id).val();
+
+            console.log($dta);
+            $('#videoModal').modal({
+                backdrop: 'static'
+            });
+            $('#videoModal').modal('show');
+            $("#frameid").attr('src' , $dta);
+        }
+
+
+
+    $(document).ready(function(){
+
+
+
+        setTimeout(function() {
+            $('.country-dropdown:first-child').trigger('change');
+    }, 100); // set a 100ms delay before triggering the event
+
+               /*------------------------------------------
+            --------------------------------------------
+            Country Dropdown Change Event
+            --------------------------------------------
+            --------------------------------------------*/
+            $('.country-dropdown').on('change', function () {
+
+                var idCountry = this.value;
+
+                $(".state-dropdown").html('');
+                $.ajax({
+                    url: "{{url('fetch-states')}}",
+                    type: "POST",
+                    data: {
+                        country_id: idCountry,
+                        _token: '{{csrf_token()}}'
+                    },
+                    dataType: 'json',
+                    success: function (result) {
+                        $('.state-dropdown').html('<option value="">-- Select State --</option>');
+                        $.each(result.states, function (key, value) {
+                            $(".state-dropdown").append('<option value="' + value
+                                .id + '">' + value.name + '</option>');
+                        });
+                        $('.city-dropdown').html('<option value="">-- Select City --</option>');
+                    }
+                });
+            });
+
+            /*------------------------------------------
+            --------------------------------------------
+            State Dropdown Change Event
+            --------------------------------------------
+            --------------------------------------------*/
+            $('.state-dropdown').on('change', function () {
+                var idState = this.value;
+                $("#city-dropdown").html('');
+                $.ajax({
+                    url: "{{url('fetch-cities')}}",
+                    type: "POST",
+                    data: {
+                        state_id: idState,
+                        _token: '{{csrf_token()}}'
+                    },
+                    dataType: 'json',
+                    success: function (res) {
+                        $('.city-dropdown').html('<option value="">-- Select City --</option>');
+                        $.each(res.cities, function (key, value) {
+                            $(".city-dropdown").append('<option value="' + value
+                                .id + '">' + value.name + '</option>');
+                        });
+                    }
+                });
+            });
+
+
+
+
+
+
+
+
+
+
+        $(".gallery a").attr("data-fancybox","mygallery");
+        $(".gallery a").each(function(){
+            $(this).attr("data-caption", $(this).find("img").attr("alt"));
+            $(this).attr("title", $(this).find("img").attr("alt"));
+        });
+        $(".gallery a").fancybox();
+
+    });
+
+
+        $(document).ready(function (e) {
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $(".enquiry-form").validate({
+                rules: {
+                    email: {
+                        required: true,
+                        email: true,
+                    },
+                    name: {
+                        required: true,
+                    },
+                    phone: {
+                        required: true,
+                    },
+                    state: {
+                        required: true,
+                    },
+                    country: {
+                        required: true,
+                    },
+
+                    // city: {
+                    //     required: true,
+
+                    // },
+
+                },
+
+                messages: {
+                    email: {
+                        required: "This field is required.",
+                        email: "Enter valid email ID",
+                    },
+                    name: {
+                        required: "This field is required.",
+                    },
+                    phone: {
+                        required: "This field is required.",
+                    },
+                    // city: {
+                    //     required: "This field is required.",
+                    // },
+                    state: {
+                        required: "This field is required.",
+                    },
+                    country: {
+                        required: "This field is required.",
+
+                    },
+                },
+                submitHandler: function (form) {
+                    enquiryform();
+                },
+            });
+        });
+
+        function enquiryform()
+        {
+
+            var form = $('#enquiry-form');
+
+            $.ajax({
+                url: "{{ url('enquiryform-store') }}",
+                type: "post",
+                _token:"{{ csrf_token() }}",
+                data: $(form).serialize(),
+                      beforeSend: function(){
+                $('#showload').show();
+                $("#btn-dis").attr("disabled", true);
+            },
+            complete: function(){
+                $('#showload').hide();
+                $("#btn-dis").attr("disabled", false);
+            },
+
+                success: (data) => {
+
+
+                    window.location.href = "{{ url('thankyou') }}";
+
+
+                    $('.text-danger').hide();
+
+                    $('#enquiry-form')[0].reset();
+
+                    console.log(data);
+
+                },
+
+                error: function(data){
+
+                    console.log(data.responseJSON.errors.email);
+
+                    $('.text-danger').show();
+
+                    $('#name-sec-err').text(data.responseJSON.errors.name);
+
+                    $('#email-sec-err').text(data.responseJSON.errors.email);
+
+                    $('#message-sec-err').text(data.responseJSON.errors.message);
+
+
+
+                }
+            });
+
+        }
+
+        $('.btn-close').click(function(){
+
+    $("#frameid").attr('src' , '');
+    //alert('aaaa');
+});
+</script>
+
+@endsection
